@@ -3,7 +3,6 @@
 // Unauthorized copying, modification, or distribution is strictly prohibited.
 
 using System;
-using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -34,8 +33,8 @@ public class StackDisplay : UserControl
     private readonly DispatcherTimer _incomeTimer;
 
     // Upgrade-Kosten (Beispielwerte)
-    private double _x2Cost = 1_000;     // 0,00 M Anzeige = €0,00 M bis <1 Mio
-    private double _plus1Cost = 10_000;
+    private double _x2Cost = 100; 
+    private double _plus1Cost = 10;
 
     public StackDisplay()
     {
@@ -108,7 +107,7 @@ public class StackDisplay : UserControl
             BorderThickness = new Thickness(1),
             Background = Brushes.White,
             Foreground = Brushes.Black,
-            Text = FormatCashM(_cash)
+            Text = FormatCash(_cash)
         };
 
         cashRow.Children.Add(cashLabel);
@@ -231,7 +230,7 @@ public class StackDisplay : UserControl
     private void GainCash()
     {
         _cash += _baseCash * _multiplier;
-        _cashBox.Text = FormatCashM(_cash);
+        UpdateUI();
     }
 
     private void TryBuyX2(object? sender, RoutedEventArgs e)
@@ -239,9 +238,8 @@ public class StackDisplay : UserControl
         if (_cash < _x2Cost) return;
         _cash -= _x2Cost;
         _multiplier *= 2;
-        _x2Cost *= 5; // einfache Progression
-        _cashBox.Text = FormatCashM(_cash);
-        UpdateCosts();
+        _x2Cost *= 1.5; // einfache Progression
+        UpdateUI();
     }
 
     private void TryBuyPlus1(object? sender, RoutedEventArgs e)
@@ -250,23 +248,48 @@ public class StackDisplay : UserControl
         _cash -= _plus1Cost;
         _baseCash += 1;
         _plus1Cost *= 2.5; // einfache Progression
-        _cashBox.Text = FormatCashM(_cash);
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        _cashBox.Text = FormatCash(_cash);
         UpdateCosts();
     }
 
     private void UpdateCosts()
     {
-        _x2CostText.Text = $"Kosten: {FormatCashM(_x2Cost)}";
-        _plus1CostText.Text = $"Kosten: {FormatCashM(_plus1Cost)}";
+        _x2CostText.Text = $"Kosten: {FormatCash(_x2Cost)}";
+        _plus1CostText.Text = $"Kosten: {FormatCash(_plus1Cost)}";
     }
 
-    // Format: €0,00 M (immer in Millionen, auch < 1 Mio als 0,00 M)
-    private static string FormatCashM(double value)
+    // Format with suffixes: 0, 1, 2, ..., 999, 1.00 K, 999.99 K, 1.00 M, etc.
+    private static string FormatCash(double value)
     {
-        var culture = CultureInfo.GetCultureInfo("de-AT");
-        var millions = value / 1_000_000d;
-        // Währungssymbol mit 2 Nachkommastellen, gefolgt von " M"
-        return string.Create(culture, $"{millions:C2} M");
+        if (value < 1000)
+        {
+            return value.ToString("0");
+        }
+
+        string[] suffixes = { "", "K", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", 
+                              "UDe", "DDe", "TDe", "QdDe", "QnDe", "SxDe", "SpDe", "OcDe", "NoDe", 
+                              "Vg", "UVg", "DVg", "TVg", "QdVg", "QnVg", "SxVg", "SpVg", "OcVg", "NoVg", "Tg" };
+        
+        int suffixIndex = 0;
+        double displayValue = value;
+        
+        while (displayValue >= 1000 && suffixIndex < suffixes.Length - 1)
+        {
+            displayValue /= 1000;
+            suffixIndex++;
+        }
+        
+        if (suffixIndex == 0)
+        {
+            return displayValue.ToString("0");
+        }
+        
+        return $"{displayValue:0.00} {suffixes[suffixIndex]}";
     }
 
     private Button CreateUpgradeCard(string title, string desc, out TextBlock costBinding, EventHandler<RoutedEventArgs> onClick)
@@ -320,7 +343,7 @@ public class StackDisplay : UserControl
 
         costBinding = new TextBlock
         {
-            Text = "Kosten: €0,00 M",
+            Text = "Cost: 0",
             FontFamily = new FontFamily("Round"),
             FontSize = 16,
             FontWeight = FontWeight.SemiBold,
