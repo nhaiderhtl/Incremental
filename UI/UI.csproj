@@ -13,4 +13,8 @@
       <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Incremental\Incremental.csproj" />
+    </ItemGroup>
+
 </Project>

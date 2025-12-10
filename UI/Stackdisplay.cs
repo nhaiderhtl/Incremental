@@ -12,15 +12,14 @@ using Avalonia.VisualTree;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity; // for RoutedEventArgs
 using Avalonia.Threading; // for DispatcherTimer
+using Incremental;
 
 namespace UI;
 
 public class StackDisplay : UserControl
 {
-    // Spielwerte
-    private double _cash;
-    private double _baseCash = 1;
-    private double _multiplier = 1;
+    // Game logic
+    private readonly GameLogic _gameLogic;
 
     // UI-Referenzen
     private TextBox _cashBox = null!;
@@ -28,22 +27,24 @@ public class StackDisplay : UserControl
     private Button _btnPlus1 = null!;
     private TextBlock _x2CostText = null!;
     private TextBlock _plus1CostText = null!;
-    
+
     // Timer für passives Einkommen
     private readonly DispatcherTimer _incomeTimer;
 
-    // Upgrade-Kosten (Beispielwerte)
-    private double _x2Cost = 100; 
-    private double _plus1Cost = 10;
 
     public StackDisplay()
     {
+        // Initialize game logic
+        _gameLogic = new GameLogic();
+        _gameLogic.CashChanged += (_, _) => UpdateUI();
+        _gameLogic.UpgradeCostsChanged += (_, _) => UpdateCosts();
+
         // Timer für passives Einkommen (1 Geld pro Sekunde)
         _incomeTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(1)
         };
-        _incomeTimer.Tick += (_, _) => GainCash();
+        _incomeTimer.Tick += (_, _) => _gameLogic.GainCash();
         _incomeTimer.Start();
 
         // Hauptcontainer
@@ -102,12 +103,12 @@ public class StackDisplay : UserControl
             FontSize = 18,
             HorizontalContentAlignment = HorizontalAlignment.Right,
             VerticalContentAlignment = VerticalAlignment.Center,
-            IsReadOnly = true,                  // Anzeige-Feld
+            IsReadOnly = true, // Anzeige-Feld
             BorderBrush = Brushes.Black,
             BorderThickness = new Thickness(1),
             Background = Brushes.White,
             Foreground = Brushes.Black,
-            Text = FormatCash(_cash)
+            Text = GameLogic.FormatCash(_gameLogic.Cash)
         };
 
         cashRow.Children.Add(cashLabel);
@@ -149,13 +150,13 @@ public class StackDisplay : UserControl
             FontSize = 26,
             Foreground = Brushes.White,
             HorizontalAlignment = HorizontalAlignment.Center,
-            Effect = new DropShadowEffect 
-            { 
-                Color = Colors.Black, 
-                Opacity = 1, 
-                BlurRadius = 0, 
-                OffsetX = 1, 
-                OffsetY = 1 
+            Effect = new DropShadowEffect
+            {
+                Color = Colors.Black,
+                Opacity = 1,
+                BlurRadius = 0,
+                OffsetX = 1,
+                OffsetY = 1
             }
         };
         upgradesStack.Children.Add(upgradesTitle);
@@ -219,7 +220,7 @@ public class StackDisplay : UserControl
                 {
                     if (e.Key == Key.C)
                     {
-                        GainCash();
+                        _gameLogic.GainCash();
                         e.Handled = true;
                     }
                 };
@@ -227,72 +228,30 @@ public class StackDisplay : UserControl
         };
     }
 
-    private void GainCash()
-    {
-        _cash += _baseCash * _multiplier;
-        UpdateUI();
-    }
-
     private void TryBuyX2(object? sender, RoutedEventArgs e)
     {
-        if (_cash < _x2Cost) return;
-        _cash -= _x2Cost;
-        _multiplier *= 2;
-        _x2Cost *= 1.5; // einfache Progression
-        UpdateUI();
+        _gameLogic.TryBuyX2();
     }
 
     private void TryBuyPlus1(object? sender, RoutedEventArgs e)
     {
-        if (_cash < _plus1Cost) return;
-        _cash -= _plus1Cost;
-        _baseCash += 1;
-        _plus1Cost *= 2.5; // einfache Progression
-        UpdateUI();
+        _gameLogic.TryBuyPlus1();
     }
 
     private void UpdateUI()
     {
-        _cashBox.Text = FormatCash(_cash);
+        _cashBox.Text = GameLogic.FormatCash(_gameLogic.Cash);
         UpdateCosts();
     }
 
     private void UpdateCosts()
     {
-        _x2CostText.Text = $"Kosten: {FormatCash(_x2Cost)}";
-        _plus1CostText.Text = $"Kosten: {FormatCash(_plus1Cost)}";
+        _x2CostText.Text = $"Kosten: {GameLogic.FormatCash(_gameLogic.X2Cost)}";
+        _plus1CostText.Text = $"Kosten: {GameLogic.FormatCash(_gameLogic.Plus1Cost)}";
     }
 
-    // Format with suffixes: 0, 1, 2, ..., 999, 1.00 K, 999.99 K, 1.00 M, etc.
-    private static string FormatCash(double value)
-    {
-        if (value < 1000)
-        {
-            return value.ToString("0");
-        }
-
-        string[] suffixes = { "", "K", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", 
-                              "UDe", "DDe", "TDe", "QdDe", "QnDe", "SxDe", "SpDe", "OcDe", "NoDe", 
-                              "Vg", "UVg", "DVg", "TVg", "QdVg", "QnVg", "SxVg", "SpVg", "OcVg", "NoVg", "Tg" };
-        
-        int suffixIndex = 0;
-        double displayValue = value;
-        
-        while (displayValue >= 1000 && suffixIndex < suffixes.Length - 1)
-        {
-            displayValue /= 1000;
-            suffixIndex++;
-        }
-        
-        if (suffixIndex == 0)
-        {
-            return displayValue.ToString("0");
-        }
-        
-        return $"{displayValue:0.00} {suffixes[suffixIndex]}";
-    }
-
-    private Button CreateUpgradeCard(string title, string desc, out TextBlock costBinding, EventHandler<RoutedEventArgs> onClick)
+    private Button CreateUpgradeCard(string title, string desc, out TextBlock costBinding,
+        EventHandler<RoutedEventArgs> onClick)
     {
         var card = new Border
         {
@@ -314,13 +273,13 @@ public class StackDisplay : UserControl
             FontWeight = FontWeight.Bold,
             FontSize = 22,
             Foreground = Brushes.White,
-            Effect = new DropShadowEffect 
-            { 
-                Color = Colors.Black, 
-                Opacity = 1, 
-                BlurRadius = 0, 
-                OffsetX = 1, 
-                OffsetY = 1 
+            Effect = new DropShadowEffect
+            {
+                Color = Colors.Black,
+                Opacity = 1,
+                BlurRadius = 0,
+                OffsetX = 1,
+                OffsetY = 1
             }
         };
 
@@ -331,13 +290,13 @@ public class StackDisplay : UserControl
             FontSize = 14,
             Foreground = Brushes.White,
             TextWrapping = TextWrapping.Wrap,
-            Effect = new DropShadowEffect 
-            { 
-                Color = Colors.Black, 
-                Opacity = 1, 
-                BlurRadius = 0, 
-                OffsetX = 1, 
-                OffsetY = 1 
+            Effect = new DropShadowEffect
+            {
+                Color = Colors.Black,
+                Opacity = 1,
+                BlurRadius = 0,
+                OffsetX = 1,
+                OffsetY = 1
             }
         };
 
@@ -348,13 +307,13 @@ public class StackDisplay : UserControl
             FontSize = 16,
             FontWeight = FontWeight.SemiBold,
             Foreground = Brushes.White,
-            Effect = new DropShadowEffect 
-            { 
-                Color = Colors.Black, 
-                Opacity = 1, 
-                BlurRadius = 0, 
-                OffsetX = 1, 
-                OffsetY = 1 
+            Effect = new DropShadowEffect
+            {
+                Color = Colors.Black,
+                Opacity = 1,
+                BlurRadius = 0,
+                OffsetX = 1,
+                OffsetY = 1
             }
         };
 
