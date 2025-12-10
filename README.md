@@ -226,6 +226,7 @@ This project was created and developed entirely by Nico in December 2025.
 ## 🤝 Contributing
 
 This is a personal project and is **not accepting contributions**.
+If you wish to share feedback or ideas, please contact me. I'd appreciate it.
 
 ---
 
