@@ -1,0 +1,467 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        x:Class="UI.MainWindow"
+        Title="Incremental Game"
+        Width="1000" Height="750"
+        CanResize="True"
+        Background="#0d1117">
+
+    <Window.Styles>
+        <Style Selector="TextBlock.title">
+            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+        </Style>
+        
+        <Style Selector="TextBlock.cash-label">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#58a6ff"/>
+        </Style>
+        
+        <Style Selector="TextBlock.cash-value">
+            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+        </Style>
+        
+        <Style Selector="TextBlock.section-title">
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+        </Style>
+
+        <Style Selector="TextBlock.cost-affordable">
+            <Setter Property="Foreground" Value="#3fb950"/>
+        </Style>
+
+        <Style Selector="TextBlock.cost-unaffordable">
+            <Setter Property="Foreground" Value="#f85149"/>
+        </Style>
+
+        <Style Selector="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#8b949e"/>
+            <Setter Property="Padding" Value="20,10"/>
+        </Style>
+
+        <Style Selector="TabItem:selected">
+            <Setter Property="Foreground" Value="#58a6ff"/>
+        </Style>
+    </Window.Styles>
+
+    <TabControl Margin="0" Padding="0">
+        <!-- Game Tab -->
+        <TabItem Header="🎮 Game">
+            <Grid RowDefinitions="Auto,*" Margin="20">
+                <!-- Header Section -->
+                <Border Grid.Row="0" 
+                        Background="#161b22"
+                        CornerRadius="12"
+                        Padding="30"
+                        Margin="0,0,0,20"
+                        BorderBrush="#30363d"
+                        BorderThickness="1">
+                    <Grid RowDefinitions="Auto,Auto">
+                        <!-- Title -->
+                        <TextBlock Grid.Row="0"
+                                  Text="💰 Incremental Game"
+                                  Classes="title"
+                                  HorizontalAlignment="Center"/>
+                        
+                        <!-- Cash Display -->
+                        <StackPanel Grid.Row="1" 
+                                   Orientation="Horizontal" 
+                                   HorizontalAlignment="Center"
+                                   Spacing="20"
+                                   Margin="0,20,0,0">
+                            <TextBlock Text="Cash:"
+                                      Classes="cash-label"
+                                      VerticalAlignment="Center"/>
+                            <Border Background="#0d1117"
+                                    CornerRadius="10"
+                                    Padding="25,15"
+                                    BorderBrush="#58a6ff"
+                                    BorderThickness="2">
+                                <TextBlock Name="CashDisplay"
+                                          Text="0"
+                                          Classes="cash-value"
+                                          MinWidth="250"
+                                          TextAlignment="Right"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Main Content -->
+                <Grid Grid.Row="1" ColumnDefinitions="1.2*,2*" ColumnSpacing="20">
+                    <!-- Stats Panel -->
+                    <Border Grid.Column="0"
+                            Background="#161b22"
+                            CornerRadius="12"
+                            Padding="25"
+                            BorderBrush="#30363d"
+                            BorderThickness="1">
+                        <StackPanel Spacing="20">
+                            <TextBlock Text="📊 Statistics"
+                                      Classes="section-title"
+                                      HorizontalAlignment="Center"
+                                      Margin="0,0,0,10"/>
+                            
+                            <Separator Background="#21262d" Height="2" Margin="0,0,0,10"/>
+                            
+                            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="18">
+                                <!-- Base Cash -->
+                                <Border Grid.Row="0"
+                                       Background="#0d1117"
+                                       CornerRadius="8"
+                                       Padding="15"
+                                       BorderBrush="#30363d"
+                                       BorderThickness="1">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0"
+                                                  Text="Base Cash/sec:"
+                                                  FontSize="18"
+                                                  Foreground="#8b949e"
+                                                  VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1"
+                                                  Name="BaseCashDisplay"
+                                                  Text="1"
+                                                  FontSize="22"
+                                                  FontWeight="Bold"
+                                                  Foreground="#3fb950"
+                                                  VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                                
+                                <!-- Multiplier -->
+                                <Border Grid.Row="1"
+                                       Background="#0d1117"
+                                       CornerRadius="8"
+                                       Padding="15"
+                                       BorderBrush="#30363d"
+                                       BorderThickness="1">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0"
+                                                  Text="Multiplier:"
+                                                  FontSize="18"
+                                                  Foreground="#8b949e"
+                                                  VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1"
+                                                  Name="MultiplierDisplay"
+                                                  Text="×1"
+                                                  FontSize="22"
+                                                  FontWeight="Bold"
+                                                  Foreground="#f85149"
+                                                  VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                                
+                                <!-- Income per second -->
+                                <Border Grid.Row="2"
+                                       Background="#0d1117"
+                                       CornerRadius="8"
+                                       Padding="15"
+                                       BorderBrush="#30363d"
+                                       BorderThickness="1">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0"
+                                                  Text="Total Income/sec:"
+                                                  FontSize="18"
+                                                  Foreground="#8b949e"
+                                                  VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1"
+                                                  Name="IncomeDisplay"
+                                                  Text="1"
+                                                  FontSize="22"
+                                                  FontWeight="Bold"
+                                                  Foreground="#ffa657"
+                                                  VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Upgrades Panel -->
+                    <Border Grid.Column="1"
+                            Background="#161b22"
+                            CornerRadius="12"
+                            Padding="25"
+                            BorderBrush="#30363d"
+                            BorderThickness="1">
+                        <StackPanel Spacing="20">
+                            <TextBlock Text="⚡ Upgrades"
+                                      Classes="section-title"
+                                      HorizontalAlignment="Center"
+                                      Margin="0,0,0,10"/>
+                            
+                            <Separator Background="#21262d" Height="2" Margin="0,0,0,10"/>
+                            
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                         HorizontalScrollBarVisibility="Disabled">
+                                <StackPanel Name="UpgradesPanel" Spacing="15">
+                                    <!-- +1 Base Cash Upgrade -->
+                                    <Button Name="BtnPlus1"
+                                           Click="OnBuyPlus1"
+                                           HorizontalAlignment="Stretch"
+                                           HorizontalContentAlignment="Stretch"
+                                           Background="#0d1117"
+                                           BorderBrush="#3fb950"
+                                           BorderThickness="2"
+                                           CornerRadius="10"
+                                           Padding="20"
+                                           Cursor="Hand">
+                                        <Button.Styles>
+                                            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                                <Setter Property="Background" Value="#161b22"/>
+                                            </Style>
+                                            <Style Selector="Button:pointerover">
+                                                <Setter Property="BorderBrush" Value="#56d364"/>
+                                                <Setter Property="BorderThickness" Value="3"/>
+                                            </Style>
+                                            <Style Selector="Button:pressed /template/ ContentPresenter">
+                                                <Setter Property="Background" Value="#0a0e13"/>
+                                            </Style>
+                                            <Style Selector="Button:disabled">
+                                                <Setter Property="Opacity" Value="0.4"/>
+                                                <Setter Property="Cursor" Value="Arrow"/>
+                                            </Style>
+                                        </Button.Styles>
+                                        <Grid RowDefinitions="Auto,Auto,Auto">
+                                            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10">
+                                                <TextBlock Text="➕"
+                                                          FontSize="24"
+                                                          VerticalAlignment="Center"/>
+                                                <TextBlock Text="+1 Base Cash"
+                                                          FontSize="22"
+                                                          FontWeight="Bold"
+                                                          Foreground="#ffffff"
+                                                          VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Row="1"
+                                                      Text="Increases base cash per second by 1"
+                                                      FontSize="15"
+                                                      Foreground="#8b949e"
+                                                      TextWrapping="Wrap"
+                                                      Margin="0,8,0,12"/>
+                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10">
+                                                <TextBlock Text="💰 Cost:"
+                                                          FontSize="17"
+                                                          Foreground="#ffa657"
+                                                          VerticalAlignment="Center"/>
+                                                <TextBlock Name="Plus1CostDisplay"
+                                                          Text="10"
+                                                          FontSize="20"
+                                                          FontWeight="Bold"
+                                                          VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Button>
+
+                                    <!-- 2x Multiplier Upgrade -->
+                                    <Button Name="BtnX2"
+                                           Click="OnBuyX2"
+                                           HorizontalAlignment="Stretch"
+                                           HorizontalContentAlignment="Stretch"
+                                           Background="#0d1117"
+                                           BorderBrush="#f85149"
+                                           BorderThickness="2"
+                                           CornerRadius="10"
+                                           Padding="20"
+                                           Cursor="Hand">
+                                        <Button.Styles>
+                                            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                                <Setter Property="Background" Value="#161b22"/>
+                                            </Style>
+                                            <Style Selector="Button:pointerover">
+                                                <Setter Property="BorderBrush" Value="#ff7b72"/>
+                                                <Setter Property="BorderThickness" Value="3"/>
+                                            </Style>
+                                            <Style Selector="Button:pressed /template/ ContentPresenter">
+                                                <Setter Property="Background" Value="#0a0e13"/>
+                                            </Style>
+                                            <Style Selector="Button:disabled">
+                                                <Setter Property="Opacity" Value="0.4"/>
+                                                <Setter Property="Cursor" Value="Arrow"/>
+                                            </Style>
+                                        </Button.Styles>
+                                        <Grid RowDefinitions="Auto,Auto,Auto">
+                                            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10">
+                                                <TextBlock Text="✖️"
+                                                          FontSize="24"
+                                                          VerticalAlignment="Center"/>
+                                                <TextBlock Text="2× Multiplier"
+                                                          FontSize="22"
+                                                          FontWeight="Bold"
+                                                          Foreground="#ffffff"
+                                                          VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Row="1"
+                                                      Text="Doubles your cash multiplier"
+                                                      FontSize="15"
+                                                      Foreground="#8b949e"
+                                                      TextWrapping="Wrap"
+                                                      Margin="0,8,0,12"/>
+                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10">
+                                                <TextBlock Text="💰 Cost:"
+                                                          FontSize="17"
+                                                          Foreground="#ffa657"
+                                                          VerticalAlignment="Center"/>
+                                                <TextBlock Name="X2CostDisplay"
+                                                          Text="100"
+                                                          FontSize="20"
+                                                          FontWeight="Bold"
+                                                          VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Button>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+        </TabItem>
+
+        <!-- Settings Tab -->
+        <TabItem Header="⚙️ Settings">
+            <Grid RowDefinitions="Auto,*" Margin="20">
+                <Border Grid.Row="0"
+                        Background="#161b22"
+                        CornerRadius="12"
+                        Padding="30"
+                        Margin="0,0,0,20"
+                        BorderBrush="#30363d"
+                        BorderThickness="1">
+                    <TextBlock Text="⚙️ Settings"
+                              Classes="title"
+                              HorizontalAlignment="Center"/>
+                </Border>
+
+                <Border Grid.Row="1"
+                        Background="#161b22"
+                        CornerRadius="12"
+                        Padding="40"
+                        BorderBrush="#30363d"
+                        BorderThickness="1"
+                        VerticalAlignment="Top">
+                    <StackPanel Spacing="30" MaxWidth="600">
+                        <!-- Game Information -->
+                        <StackPanel Spacing="15">
+                            <TextBlock Text="📋 Game Information"
+                                      FontSize="24"
+                                      FontWeight="Bold"
+                                      Foreground="#ffffff"/>
+                            <Separator Background="#21262d" Height="2"/>
+                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="12">
+                                <TextBlock Grid.Row="0" Grid.Column="0"
+                                          Text="Version:"
+                                          FontSize="18"
+                                          Foreground="#8b949e"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1"
+                                          Text="1.0.0"
+                                          FontSize="18"
+                                          FontWeight="Bold"
+                                          Foreground="#58a6ff"/>
+                                
+                                <TextBlock Grid.Row="1" Grid.Column="0"
+                                          Text="Created by:"
+                                          FontSize="18"
+                                          Foreground="#8b949e"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1"
+                                          Text="Nico"
+                                          FontSize="18"
+                                          FontWeight="Bold"
+                                          Foreground="#58a6ff"/>
+                                
+                                <TextBlock Grid.Row="2" Grid.Column="0"
+                                          Text="Year:"
+                                          FontSize="18"
+                                          Foreground="#8b949e"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1"
+                                          Text="2025"
+                                          FontSize="18"
+                                          FontWeight="Bold"
+                                          Foreground="#58a6ff"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Controls -->
+                        <StackPanel Spacing="15">
+                            <TextBlock Text="🎮 Controls"
+                                      FontSize="24"
+                                      FontWeight="Bold"
+                                      Foreground="#ffffff"/>
+                            <Separator Background="#21262d" Height="2"/>
+                            <StackPanel Spacing="10">
+                                <Border Background="#0d1117"
+                                       CornerRadius="8"
+                                       Padding="15"
+                                       BorderBrush="#30363d"
+                                       BorderThickness="1">
+                                    <TextBlock TextWrapping="Wrap"
+                                              FontSize="16"
+                                              Foreground="#8b949e">
+                                        <Run Text="• Click on upgrade buttons to purchase them" FontWeight="SemiBold" Foreground="#ffffff"/><LineBreak/>
+                                        <Run Text="• Cash is earned automatically every second"/><LineBreak/>
+                                        <Run Text="• Switch between tabs to access different features"/>
+                                    </TextBlock>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Actions -->
+                        <StackPanel Spacing="15">
+                            <TextBlock Text="🔧 Actions"
+                                      FontSize="24"
+                                      FontWeight="Bold"
+                                      Foreground="#ffffff"/>
+                            <Separator Background="#21262d" Height="2"/>
+                            <Button Name="BtnExit"
+                                   Click="OnExitGame"
+                                   HorizontalAlignment="Stretch"
+                                   Background="#0d1117"
+                                   BorderBrush="#f85149"
+                                   BorderThickness="2"
+                                   CornerRadius="10"
+                                   Padding="20"
+                                   Cursor="Hand">
+                                <Button.Styles>
+                                    <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                        <Setter Property="Background" Value="#f85149"/>
+                                    </Style>
+                                    <Style Selector="Button:pointerover">
+                                        <Setter Property="BorderBrush" Value="#ff7b72"/>
+                                    </Style>
+                                    <Style Selector="Button:pressed /template/ ContentPresenter">
+                                        <Setter Property="Background" Value="#da3633"/>
+                                    </Style>
+                                </Button.Styles>
+                                <StackPanel Orientation="Horizontal" Spacing="15" HorizontalAlignment="Center">
+                                    <TextBlock Text="🚪"
+                                              FontSize="24"
+                                              VerticalAlignment="Center"/>
+                                    <TextBlock Text="Exit Game"
+                                              FontSize="20"
+                                              FontWeight="Bold"
+                                              Foreground="#ffffff"
+                                              VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
+

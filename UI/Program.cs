@@ -27,13 +27,7 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var window = new MainWindow
-            {
-
-                WindowState = WindowState.FullScreen
-            };
-
-            desktop.MainWindow = window;
+            desktop.MainWindow = new MainWindow();
         }
 
         base.OnFrameworkInitializationCompleted();
