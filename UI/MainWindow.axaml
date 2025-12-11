@@ -352,12 +352,12 @@
                         CornerRadius="12"
                         Padding="40"
                         BorderBrush="#30363d"
-                        BorderThickness="1"
-                        VerticalAlignment="Top">
-                    <StackPanel Spacing="30" MaxWidth="600">
-                        <!-- Game Information -->
-                        <StackPanel Spacing="15">
-                            <TextBlock Text="📋 Game Information"
+                        BorderThickness="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Spacing="30" MaxWidth="600">
+                            <StackPanel Spacing="15">
+                                <TextBlock Text="📋 Game Information"
                                       FontSize="24"
                                       FontWeight="Bold"
                                       Foreground="#ffffff"/>
@@ -458,7 +458,8 @@
                                 </StackPanel>
                             </Button>
                         </StackPanel>
-                    </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
                 </Border>
             </Grid>
         </TabItem>
