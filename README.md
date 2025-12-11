@@ -1,21 +1,21 @@
 # Incremental Game
 
-🚧 **Work In Progress - Under Active Development** 🚧
+**Work In Progress - Under Active Development**
 
 A modern incremental/idle game built with Avalonia UI and .NET 8, featuring a custom big number system, passive income mechanics, and a beautiful GitHub Dark-themed interface.
 
-## 🎮 Features
+## Features
 
-### Currently Implemented ✅
+### Currently Implemented
 
 - **Passive Income System**: Automatically earn money every second - no clicking required!
 - **Custom BigNum System**: Advanced number formatting with suffix support (0, 1, 2... 999, 1.00 K, 999.99 K, 1.00 M, etc.)
 - **Two Core Upgrades**:
   - **+1 Base Cash** (Starting cost: 10) - Increases base cash earned per second by 1
-  - **2× Multiplier** (Starting cost: 100) - Doubles your cash multiplier
+  - **2x Multiplier** (Starting cost: 100) - Doubles your cash multiplier
 - **Dynamic Cost Colors**: 
-  - 🟢 **Green** when you can afford an upgrade
-  - 🔴 **Red** when you cannot afford it (updates in real-time!)
+  - Green when you can afford an upgrade
+  - Red when you cannot afford it (updates in real-time!)
 - **Modern XAML UI**: Clean, responsive interface with GitHub Dark theme
 - **Tab Navigation**: Switch between Game and Settings pages
 - **Statistics Panel**: Real-time display of:
@@ -28,7 +28,7 @@ A modern incremental/idle game built with Avalonia UI and .NET 8, featuring a cu
   - Easy exit button (no Alt+F4 needed!)
 - **MVVM Architecture**: Clean separation between UI and game logic
 
-### Planned Features 🚀
+### Planned Features
 
 - More upgrade types
 - Save/Load system
@@ -38,7 +38,7 @@ A modern incremental/idle game built with Avalonia UI and .NET 8, featuring a cu
 - Animations
 - Extended suffix support beyond current implementation
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 Incremental/
@@ -59,47 +59,32 @@ Incremental/
     └── MoneyTests.cs      # Money system tests
 ```
 
-## 🚀 Getting Started
+## Getting Started
+
+### Quick Start
+
+The easiest way to run the game:
+
+```bash
+./play.sh
+```
+
+**For detailed setup instructions, troubleshooting, and manual installation options, see [SETUP.md](SETUP.md).**
 
 ### Prerequisites
 
 - [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - Linux, macOS, or Windows
 
-### Installation
+The play.sh script will automatically check for dependencies, restore packages, build the project, and launch the game.
 
-1. Clone this repository:
-   ```bash
-   git clone <repository-url>
-   cd Incremental
-   ```
-
-2. Restore dependencies:
-   ```bash
-   dotnet restore
-   ```
-
-3. Build the project:
-   ```bash
-   dotnet build
-   ```
-
-### Running the Game
-
-Run the game using:
-```bash
-dotnet run --project UI/UI.csproj
-```
-
-The game will open in a resizable window with tab navigation (Game and Settings).
-
-## 🎯 How to Play
+## How to Play
 
 ### Basic Mechanics
 
 - **Passive Income**: Cash is automatically generated every second based on your base cash and multiplier
 - **Upgrades**: Click on upgrade buttons when they're enabled (green cost) to purchase them
-- **Tab Navigation**: Switch between the **🎮 Game** tab and **⚙️ Settings** tab
+- **Tab Navigation**: Switch between the Game tab and Settings tab
 
 ### Understanding the Interface
 
@@ -126,7 +111,7 @@ The game will open in a resizable window with tab navigation (Game and Settings)
 3. Balance between both upgrades for exponential growth
 4. Watch the cost colors: Green = affordable, Red = keep saving!
 
-## 🧪 Testing
+## Testing
 
 Run the test suite:
 ```bash
@@ -137,7 +122,7 @@ All tests should pass:
 - **BigNum Tests**: Validates number parsing, formatting, and arithmetic operations
 - **Money Tests**: Ensures proper money calculations
 
-## 🛠️ Development
+## Development
 
 ### Building Individual Projects
 
@@ -158,7 +143,7 @@ dotnet build Incremental.Tests/Incremental.Tests.csproj
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-## 📊 BigNum System
+## BigNum System
 
 The custom BigNum system supports arithmetic with large numbers using suffixes:
 
@@ -188,7 +173,7 @@ var d = new BigNum(0.2, Suffix.M);  // 0.2M
 var (diff, success) = c - d;        // 300K
 ```
 
-## 🔧 Technical Details
+## Technical Details
 
 - **Framework**: .NET 8.0
 - **UI Framework**: Avalonia 11.x (XAML-based)
@@ -199,40 +184,37 @@ var (diff, success) = c - d;        // 300K
 - **Testing**: xUnit with 25 unit tests (all passing)
 - **Number System**: Custom BigNum implementation with suffix support
 
-## 📝 License & Copyright
+## License & Copyright
 
-**Copyright © 2025 Nico. All Rights Reserved.**
+**Copyright (c) 2025 Nico. All Rights Reserved.**
 
 This project and all of its contents are the exclusive property of Nico.
 
 ### Terms of Use
 
-- ❌ **NO COPYING**: This code may not be copied, reproduced, or distributed in any form
-- ❌ **NO MODIFICATION**: Creating derivative works is strictly prohibited
-- ❌ **NO COMMERCIAL USE**: This software may not be used for commercial purposes
-- ❌ **NO REDISTRIBUTION**: Sharing or publishing this code is not permitted
-- ⚠️ **VIEWING ONLY**: This repository is available for viewing and personal learning only
+- NO COPYING: This code may not be copied, reproduced, or distributed in any form
+- NO MODIFICATION: Creating derivative works is strictly prohibited
+- NO COMMERCIAL USE: This software may not be used for commercial purposes
+- NO REDISTRIBUTION: Sharing or publishing this code is not permitted
+- VIEWING ONLY: This repository is available for viewing and personal learning only
 
 **All rights, title, and interest in and to this software remain with Nico.**
 
 Any unauthorized use, copying, modification, or distribution of this software is strictly prohibited and may result in severe civil and criminal penalties.
 
-## 👤 Author
+## Author
 
 **Nico**
 
 This project was created and developed entirely by Nico in December 2025.
 
-## 🤝 Contributing
+## Contributing
 
 This is a personal project and is **not accepting contributions**.
-If you wish to share feedback or ideas, please contact me. I'd appreciate it.
 
 ---
 
-**Made with ❤️ by Nico | December 2025**
-
-**All credits and ownership belong exclusively to Nico - Forever and Always**
+**Made with love by Nico | December 2025**
 
 **All credits and ownership belong exclusively to Nico - Forever and Always**
 
