@@ -460,7 +460,8 @@
                                 </StackPanel>
                             </Button>
                         </StackPanel>
-                    </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
                 </Border>
             </Grid>
         </TabItem>
