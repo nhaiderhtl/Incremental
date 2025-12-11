@@ -9,5 +9,6 @@ public class Upgrade
     {
         this.cost = cost;
         this.multiplier = multi;
+        //TODO effect types with enum maybe and dont take multi but just like value/change
     }
 }
