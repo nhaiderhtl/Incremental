@@ -3,6 +3,7 @@
 // Unauthorized copying, modification, or distribution is strictly prohibited.
 
 using System;
+using BigNum;
 
 namespace Incremental;
 
@@ -16,6 +17,7 @@ public class GameLogic
     // Upgrade costs
     private double _x2Cost = 100;
     private double _plus1Cost = 10;
+
 
     // Events for UI updates
     public event EventHandler? CashChanged;
@@ -49,11 +51,11 @@ public class GameLogic
     public bool TryBuyX2()
     {
         if (_cash < _x2Cost) return false;
-        
+
         _cash -= _x2Cost;
         _multiplier *= 2;
         _x2Cost *= 1.5;
-        
+
         OnCashChanged();
         OnUpgradeCostsChanged();
         return true;
@@ -66,11 +68,11 @@ public class GameLogic
     public bool TryBuyPlus1()
     {
         if (_cash < _plus1Cost) return false;
-        
+
         _cash -= _plus1Cost;
         _baseCash += 1;
         _plus1Cost *= 2.5;
-        
+
         OnCashChanged();
         OnUpgradeCostsChanged();
         return true;
@@ -86,25 +88,16 @@ public class GameLogic
             return value.ToString("0");
         }
 
-        string[] suffixes = { "", "K", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", 
-                              "UDe", "DDe", "TDe", "QdDe", "QnDe", "SxDe", "SpDe", "OcDe", "NoDe", 
-                              "Vg", "UVg", "DVg", "TVg", "QdVg", "QnVg", "SxVg", "SpVg", "OcVg", "NoVg", "Tg" };
-        
         int suffixIndex = 0;
         double displayValue = value;
-        
-        while (displayValue >= 1000 && suffixIndex < suffixes.Length - 1)
+
+        while (displayValue >= 1000 && suffixIndex < SuffixConstants.MaxSuffixIndex)
         {
             displayValue /= 1000;
             suffixIndex++;
         }
-        
-        if (suffixIndex == 0)
-        {
-            return displayValue.ToString("0");
-        }
-        
-        return $"{displayValue:0.00} {suffixes[suffixIndex]}";
+
+        return suffixIndex == 0 ? displayValue.ToString("0") : $"{displayValue:0.00} {SuffixConstants.GetSuffix(suffixIndex)}";
     }
 
     protected virtual void OnCashChanged()
@@ -117,4 +110,3 @@ public class GameLogic
         UpgradeCostsChanged?.Invoke(this, EventArgs.Empty);
     }
 }
-
