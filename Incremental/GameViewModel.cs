@@ -21,7 +21,7 @@ public class GameViewModel : INotifyPropertyChanged
     public string IncomeDisplay => GameLogic.FormatCash(_gameLogic.BaseCash * _gameLogic.Multiplier);
     public string Plus1CostDisplay => GameLogic.FormatCash(_gameLogic.Plus1Cost);
     public string X2CostDisplay => GameLogic.FormatCash(_gameLogic.X2Cost);
-    
+
     public bool CanAffordPlus1 => _gameLogic.Cash >= _gameLogic.Plus1Cost;
     public bool CanAffordX2 => _gameLogic.Cash >= _gameLogic.X2Cost;
 
@@ -64,4 +64,3 @@ public class GameViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
-
