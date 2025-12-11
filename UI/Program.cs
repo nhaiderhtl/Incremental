@@ -3,10 +3,10 @@
 // Unauthorized copying, modification, or distribution is strictly prohibited.
 
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Themes.Fluent;
-using UI;
+
+namespace UI;
 
 public class Program
 {
