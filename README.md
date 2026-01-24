@@ -1,6 +1,7 @@
 # Incremental Game
 
 **Work In Progress - Under Active Development**
+- **Web-Version** => [web-incremental](https://github.com/nhaiderhtl/web-incremental)
 
 A modern incremental/idle game built with Avalonia UI and .NET 8, featuring a custom big number system, passive income mechanics, and a beautiful GitHub Dark-themed interface.
 
